@@ -2,7 +2,7 @@
 #--------------------Author:ekahPruthvi--------------------#
 
 #-----------------init------------------------#
-cd ~/
+cd ~/Pictures
 flag=1
 
 #-----------------files&folders---------------#
@@ -20,10 +20,29 @@ fnf() {
 #--------------------icons--------------------#
 showfile(){
     readarray -t file_array <<<"$files"
-    num=${#file_array[@]}
-    echo "$num"
+    local num=${#}
     for word in "${file_array[@]}"; do
-        printf  "╔█▀▀▀▀▀▄\n║█     █\n║█#####█\n║█▄▄▄▄▄█\n╚══════╝\n$word\n\n"
+        printf  "╔█▀▀▀▀▀▄\t"
+    done
+    echo 
+    for word in "${file_array[@]}"; do
+        printf  "║█     █\t"
+    done
+    echo
+    for word in "${file_array[@]}"; do
+        printf  "║█#####█\t"
+    done
+    echo
+    for word in "${file_array[@]}"; do
+        printf  "║█▄▄▄▄▄█\t"
+    done
+    echo
+    for word in "${file_array[@]}"; do
+        printf  "╚══════╝\t"
+    done
+    echo
+    for word in "${file_array[@]}"; do
+        printf  "%-15.15s " "$word"
     done
 }
 
