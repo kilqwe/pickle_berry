@@ -1,0 +1,22 @@
+#!/bin/bash
+#--------------------Author:ekahPruthvi--------------------#
+cd ~/
+files=$(ls)
+
+#--------------------menu--------------------#
+while true; do
+    read -rsn1 input
+    if [ "$input" = "a" ]; then
+        clear
+        echo "$files"
+    elif [ "$input" = "h" ]; then
+        clear
+        echo "Bob the builder"
+    elif [ "$input" = "s" ]; then
+        clear
+        read -s complete
+        echo "$complete"
+    elif [ "$input" = "q" ]; then
+        break
+    fi
+done
