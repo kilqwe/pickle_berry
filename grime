@@ -1,22 +1,54 @@
 #!/bin/bash
 #--------------------Author:ekahPruthvi--------------------#
+
+#-----------------init------------------------#
 cd ~/
-files=$(ls)
+flag=1
+
+#-----------------files&folders---------------#
+fnf() {
+    local hide="$1"
+    if [ "$hide" = 1 ]; then
+        folders=$(ls -d */)
+        files=$(ls -p | grep -v /)
+    else
+        folders=$(ls -Ap | grep / | grep "^.")
+        files=$(ls -Ap | grep -v / | grep "^.")
+    fi
+}
+
+#--------------------icons--------------------#
+showfile(){
+    readarray -t file_array <<<"$files"
+    num=${#file_array[@]}
+    echo "$num"
+    for word in "${file_array[@]}"; do
+        printf  "╔█▀▀▀▀▀▄\n║█     █\n║█#####█\n║█▄▄▄▄▄█\n╚══════╝\n$word\n\n"
+    done
+}
 
 #--------------------menu--------------------#
 while true; do
     read -rsn1 input
     if [ "$input" = "a" ]; then
         clear
-        echo "$files"
+        fnf "$flag"
+        showfile
     elif [ "$input" = "h" ]; then
         clear
-        echo "Bob the builder"
+        if [[ "$flag" -eq 1 ]]; then
+            echo "hide toggle off"
+            flag=0
+        else
+            echo "hide toggle on"
+            flag=1
+        fi
     elif [ "$input" = "s" ]; then
         clear
         read -s complete
         echo "$complete"
     elif [ "$input" = "q" ]; then
+        clear
         break
     fi
 done
