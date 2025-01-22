@@ -2,7 +2,7 @@
 #--------------------Author:ekahPruthvi--------------------#
 
 #-----------------init------------------------#
-cd ~/Pictures
+cd ~/
 flag=1
 
 #-----------------files&folders---------------#
@@ -20,30 +20,37 @@ fnf() {
 #--------------------icons--------------------#
 showfile(){
     readarray -t file_array <<<"$files"
-    local num=${#}
-    for word in "${file_array[@]}"; do
-        printf  "╔█▀▀▀▀▀▄\t"
-    done
-    echo 
-    for word in "${file_array[@]}"; do
-        printf  "║█     █\t"
-    done
-    echo
-    for word in "${file_array[@]}"; do
-        printf  "║█#####█\t"
-    done
-    echo
-    for word in "${file_array[@]}"; do
-        printf  "║█▄▄▄▄▄█\t"
-    done
-    echo
-    for word in "${file_array[@]}"; do
-        printf  "╚══════╝\t"
-    done
-    echo
-    for word in "${file_array[@]}"; do
-        printf  "%-15.15s " "$word"
-    done
+    local num=${#file_array[@]}
+    local win_width=$(tput cols)
+    printf "$win_width\n$num\n"
+    if [[ $(( win_width / 15 )) -gt "$num"  ]]; then 
+        for word in "${file_array[@]}"; do
+            printf  "╔█▀▀▀▀▀▄\t"
+        done
+        echo 
+        for word in "${file_array[@]}"; do
+            printf  "║█     █\t"
+        done
+        echo
+        for word in "${file_array[@]}"; do
+            printf  "║█#####█\t"
+        done
+        echo
+        for word in "${file_array[@]}"; do
+            printf  "║█▄▄▄▄▄█\t"
+        done
+        echo
+        for word in "${file_array[@]}"; do
+            printf  "╚══════╝\t"
+        done
+        echo
+        for word in "${file_array[@]}"; do
+            printf  "%-15.15s " "$word"
+        done
+    else 
+        echo "ERROR:SCREEN WIDTH LIMITED"
+    fi
+
 }
 
 #--------------------menu--------------------#
