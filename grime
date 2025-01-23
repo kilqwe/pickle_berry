@@ -7,6 +7,7 @@ flag=1
 win_width=$(tput cols)
 tput civis
 clear
+printf "$color"
 
 #-----------------backend---------------#
 fnf() {
@@ -26,21 +27,23 @@ make_window() {
     local ROW=$( tput lines )
     local temp=$COL
     #printf "$COL"
-    printf "╔"
+    printf "┌"
     for (( i=1 ; i<( $COL - 1 ) ; i++ )); do
-        printf "═"
+        printf "─"
     done
-    printf "╗\n"
+    printf "┐\n"
     for (( i=1 ; i<( $ROW - 2 ); i++ )); do
-         printf "║" 
+         printf "│" 
          tput cup $i $COL
-         printf "║\n"
+         printf "│\n"
     done
-    printf "╚"
+    printf "└"
     for (( i=1 ; i<( $COL - 1 ) ; i++ )); do
-        printf "═"
+        printf "─"
     done
-    printf "╝"
+    printf "┘"
+    tput cup 0 3
+    printf "~grime~"
     tput cup 1 1
 }
 
@@ -82,7 +85,7 @@ Fillaform(){
         wc=${#temp}
         finendpadd=$(( ($max-$wc)-5 ))
         tput cup $nline $fpadding
-        printf "$BIWhite %${finstartpadd}s %s%${finendpadd}s" "" "$temp"
+        printf " %${finstartpadd}s\033[7m %s%${finendpadd}s\033[0m" "" "$temp"
         echo "$end"
         ((nline++))
         local fline="╚"
@@ -144,10 +147,9 @@ show(){
         echo "  [$PWD]"
         echo
         if [[ $(( win_width / 15 )) -gt "$num"  ]]; then 
-            file_icon "╔█▀▀▀▀▀▄"
-            file_icon "║█     █"
-            file_icon "║█     █"
-            file_icon "║█▄▄▄▄▄█"
+            file_icon "╔▒▀▀▀▒▒▒"
+            file_icon "║███████"
+            file_icon "║███████"
             file_icon "╚══════╝"
             printf "  "
             for word in "${file_array[@]}"; do
@@ -158,10 +160,9 @@ show(){
             local w=0
             local wc=0
             for (( i=1 ; i<=$max_lines ; i++ )); do
-                file_icon_exp "╔█▀▀▀▀▀▄"
-                file_icon_exp "║█     █"
-                file_icon_exp "║█     █"
-                file_icon_exp "║█▄▄▄▄▄█"
+                file_icon_exp "╔▒▀▀▀▒▒▒"
+                file_icon_exp "║███████"
+                file_icon_exp "║███████"
                 file_icon_exp "╚══════╝"
                 w=0
                 wc=$start_wc
@@ -214,7 +215,7 @@ show(){
     fi
 }
 
-#--------------------menu--------------------#
+#--------------------main--------------------#
 display_seq(){
     clear
     show 1
@@ -225,7 +226,7 @@ display_seq(){
 }
 
 
-Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-q to quit" 
+Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit" 
 make_window
 
 while true; do
@@ -243,12 +244,20 @@ while true; do
             flag=1
             display_seq
         fi
-    elif [ "$input" = "s" ]; then
-        clear
-        read -s complete
-        echo "$complete"
+    elif [ "$input" = "/" ]; then
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf "~cd : "
+        read dir
+        if [ "$dir" = "[]" ]; then
+            cd ~/
+        elif [ "$dir" = "<" ]; then
+            cd ../
+        fi
+        cd "$dir"
+        display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-q to quit"
+        Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
     elif [ "$input" = "q" ]; then
         tput cnorm
         clear
