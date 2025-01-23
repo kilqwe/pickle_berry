@@ -4,8 +4,11 @@
 #-----------------init------------------------#
 cd ~/
 flag=1
+win_width=$(tput cols)
+tput civis
+clear
 
-#-----------------files&folders---------------#
+#-----------------backend---------------#
 fnf() {
     local hide="$1"
     if [ "$hide" = 1 ]; then
@@ -17,13 +20,95 @@ fnf() {
     fi
 }
 
-#--------------------icons--------------------#
+make_window() {
+    tput cup 0 0 
+    local COL=$( tput cols )
+    local ROW=$( tput lines )
+    local temp=$COL
+    #printf "$COL"
+    printf "╔"
+    for (( i=1 ; i<( $COL - 1 ) ; i++ )); do
+        printf "═"
+    done
+    printf "╗\n"
+    for (( i=1 ; i<( $ROW - 2 ); i++ )); do
+         printf "║" 
+         tput cup $i $COL
+         printf "║\n"
+    done
+    printf "╚"
+    for (( i=1 ; i<( $COL - 1 ) ; i++ )); do
+        printf "═"
+    done
+    printf "╝"
+    tput cup 1 1
+}
 
+#taken from basil
+Fillaform(){
+    local ROW=$(tput lines)  
+    local lineno="$#"
+    local max=50
+    for i in "$@"
+    do      
+        local temp="$i"
+        local wc=${#temp}
+        if [ "$wc" -gt "$max" ]
+        then
+            max="$wc"
+        fi
+    done
+    max=$(($max+5))
+    local fwidth=$(tput cols)
+    local fpadding=$(( (fwidth - ${max}) / 2 ))
+    local fendpad=$((( (fwidth - ${max}) / 2 )-1))
+    local cont=0
+    echo ""
+    echo ""
+    tput cup $(( (ROW / 2) - 7 ))
+    local nline=$(( (ROW / 2) - 7 ))
+    for i in "$@"
+    do
+        local finstartpadd=2
+        local finendpadd=2
+        temp="$i"
+        local end="║"
+        if [ "$cont" -eq 0 ]
+        then
+            end="╗"
+            
+        fi
+        cont=$(($cont+1))
+        wc=${#temp}
+        finendpadd=$(( ($max-$wc)-5 ))
+        tput cup $nline $fpadding
+        printf "$BIWhite %${finstartpadd}s %s%${finendpadd}s" "" "$temp"
+        echo "$end"
+        ((nline++))
+        local fline="╚"
+        if [ "$cont" -eq "$lineno" ]
+        then 
+            tput cup $nline $(( $fpadding + 2))
+            for f in $(seq 1 "$((max - 2 ))" )
+            do
+                if [ "$f" -eq "$(( max - 2 ))" ]
+                then
+                    fline="╝"
+                fi
+                printf "$fline"
+                fline="═"
+            done
+        fi
+    done
+}
+
+
+#--------------------icons--------------------#
 file_icon_exp(){
     local w=0
     local wc=$start_wc
     while [ $w -lt $files_in_line ] && [ $wc -lt $num ]; do
-        printf  "$1\t"
+        printf  "  $1\t"
         ((w++))
         ((wc++))
     done
@@ -32,28 +117,11 @@ file_icon_exp(){
 
 file_icon(){
     for word in "${file_array[@]}"; do
-        printf  "$1\t"
+        printf  "  $1\t"
     done
     echo
 }
 
-folder_icon_exp(){
-    local w=0
-    local wc=$start_fwc
-    while [ $w -lt $files_in_line ] && [ $wc -lt $num ]; do
-        printf  "$1\t"
-        ((w++))
-        ((wc++))
-    done
-    echo
-}
-
-folder_icon(){
-    for fword in "${folder_array[@]}"; do
-        printf  "$1\t"
-    done
-    echo
-}
 
 show(){
     echo
@@ -65,14 +133,15 @@ show(){
     fi
 
     local num=${#file_array[@]}
-    local win_width=$(tput cols)
+    local width=$(tput cols)
+    local win_width=$(( width - 2 ))
     local max_lines=$(( (num / (win_width / 15)) + 1 ))
     local cur_num=$num
     local files_in_line=$(( (win_width / 15) - 1 ))
 
     #printf "$win_width\n$max_lines\n$num\n" #testing
     if [ "$1" = 1 ]; then 
-        echo "[$PWD]"
+        echo "  [$PWD]"
         echo
         if [[ $(( win_width / 15 )) -gt "$num"  ]]; then 
             file_icon "╔█▀▀▀▀▀▄"
@@ -80,6 +149,7 @@ show(){
             file_icon "║█     █"
             file_icon "║█▄▄▄▄▄█"
             file_icon "╚══════╝"
+            printf "  "
             for word in "${file_array[@]}"; do
                 printf  "%-15.15s " "/$word"
             done
@@ -95,6 +165,7 @@ show(){
                 file_icon_exp "╚══════╝"
                 w=0
                 wc=$start_wc
+                printf "  "
                 while [ $w -lt $files_in_line ] && [ $wc -lt $num ]; do
                     printf  "%-15.15s " "/${file_array[$wc]}"
                     ((w++))
@@ -113,6 +184,7 @@ show(){
             file_icon "║█#####█"
             file_icon "║█▄▄▄▄▄█"
             file_icon "╚══════╝"
+            printf "  "
             for word in "${file_array[@]}"; do
                 printf  "%-15.15s " "-$word"
             done
@@ -128,6 +200,7 @@ show(){
                 file_icon_exp "╚══════╝"
                 w=0
                 wc=$start_wc
+                printf "  "
                 while [ $w -lt $files_in_line ] && [ $wc -lt $num ]; do
                     printf  "%-15.15s " "-${file_array[$wc]}"
                     ((w++))
@@ -142,28 +215,42 @@ show(){
 }
 
 #--------------------menu--------------------#
+display_seq(){
+    clear
+    show 1
+    echo
+    echo
+    show 0
+    make_window
+}
+
+
+Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-q to quit" 
+make_window
+
 while true; do
     read -rsn1 input
     if [ "$input" = "a" ]; then
-        clear
-        show 1
-        echo
-        echo
-        show 0
+        display_seq
     elif [ "$input" = "h" ]; then
         clear
         if [[ "$flag" -eq 1 ]]; then
-            echo "hide toggle off"
+            echo "hide toggle off" && sleep 1s
             flag=0
+            display_seq
         else
-            echo "hide toggle on"
+            echo "hide toggle on" && sleep 1s
             flag=1
+            display_seq
         fi
     elif [ "$input" = "s" ]; then
         clear
         read -s complete
         echo "$complete"
+    elif [ "$input" = "!" ]; then
+        Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-q to quit"
     elif [ "$input" = "q" ]; then
+        tput cnorm
         clear
         break
     fi
