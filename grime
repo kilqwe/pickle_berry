@@ -9,10 +9,14 @@ win_size=$( tput lines )
 max_rows=0
 
 tput civis
-clear
+printf '\033[2J\033[3J\033[1;1H'
 printf "$color"
 
 #-----------------backend---------------#
+clear_win() {
+    printf '\033[2J\033[3J\033[1;1H'
+}
+
 fnf() {
     local hide="$1"
     if [ "$hide" = 1 ]; then
@@ -220,7 +224,7 @@ show(){
 
 #--------------------main--------------------#
 display_seq(){
-    clear
+    clear_win
     show 1
     echo
     echo
@@ -240,7 +244,7 @@ while true; do
         max_rows=0
         display_seq
     elif [ "$input" = "h" ]; then
-        clear
+        clear_win
         if [[ "$flag" -eq 1 ]]; then
             echo "hide toggle off" && sleep 1s
             flag=0
@@ -269,7 +273,7 @@ while true; do
         Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
     elif [ "$input" = "q" ]; then
         tput cnorm
-        clear
+        clear_win
         break
     fi
 done
