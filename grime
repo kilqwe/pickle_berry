@@ -21,6 +21,17 @@ fnf() {
     fi
 }
 
+fuzzy() {
+  local pattern="$1"
+  local search_list=("${@:2}")
+
+  for item in "${search_list[@]}"; do
+    if echo "$item" | grep -iq "$pattern"; then
+      echo "$item"
+    fi
+  done
+}
+
 make_window() {
     tput cup 0 0 
     local COL=$( tput cols )
@@ -249,12 +260,14 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf "~cd : "
         read dir
+        readarray -t folder_array <<<"$folders"
+        fdir=$(fuzzy "$dir" "${folder_array[@]}")
         if [ "$dir" = "[]" ]; then
             cd ~/
-        elif [ "$dir" = "<" ]; then
+        elif [ "$dir" = "[" ]; then
             cd ../
         fi
-        cd "$dir"
+        cd "$fdir"
         display_seq
     elif [ "$input" = "!" ]; then
         Fillaform "~grime~" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
