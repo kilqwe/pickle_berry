@@ -3,8 +3,11 @@
 
 #-----------------init------------------------#
 cd ~/
+
 flag=1
-win_width=$(tput cols)
+win_size=$( tput lines )
+max_rows=0
+
 tput civis
 clear
 printf "$color"
@@ -25,7 +28,6 @@ make_window() {
     tput cup 0 0 
     local COL=$( tput cols )
     local ROW=$( tput lines )
-    local temp=$COL
     #printf "$COL"
     printf "┌"
     for (( i=1 ; i<( $COL - 1 ) ; i++ )); do
@@ -141,6 +143,7 @@ show(){
     local max_lines=$(( (num / (win_width / 15)) + 1 ))
     local cur_num=$num
     local files_in_line=$(( (win_width / 15) - 1 ))
+    max_rows=$(( $max_rows + $max_lines ))
 
     #printf "$win_width\n$max_lines\n$num\n" #testing
     if [ "$1" = 1 ]; then 
@@ -222,7 +225,9 @@ display_seq(){
     echo
     echo
     show 0
-    make_window
+    if [[ $(( $max_rows * 8 )) -lt "$win_size" ]]; then
+        make_window
+    fi
 }
 
 
@@ -232,16 +237,19 @@ make_window
 while true; do
     read -rsn1 input
     if [ "$input" = "a" ]; then
+        max_rows=0
         display_seq
     elif [ "$input" = "h" ]; then
         clear
         if [[ "$flag" -eq 1 ]]; then
             echo "hide toggle off" && sleep 1s
             flag=0
+            max_rows=0
             display_seq
         else
             echo "hide toggle on" && sleep 1s
             flag=1
+            max_rows=0
             display_seq
         fi
     elif [ "$input" = "/" ]; then
@@ -255,6 +263,7 @@ while true; do
             cd ../
         fi
         cd "$dir"
+        max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
         Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
