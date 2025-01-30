@@ -111,8 +111,6 @@ Fillaform(){
     done
 }
 
-
-#--------------------icons--------------------#
 file_icon_exp(){
     local w=0
     local wc=$start_wc
@@ -193,8 +191,10 @@ show(){
             file_icon "║█▄▄▄▄▄█"
             file_icon "╚══════╝"
             printf "  "
+            local counter=0
             for word in "${file_array[@]}"; do
-                printf  "%-15.15s " "-$word"
+                printf  "%-15.15s " "$counter]$word"
+                ((counter++))
             done
         else 
             start_wc=0
@@ -210,7 +210,7 @@ show(){
                 wc=$start_wc
                 printf "  "
                 while [ $w -lt $files_in_line ] && [ $wc -lt $num ]; do
-                    printf  "%-15.15s " "-${file_array[$wc]}"
+                    printf  "%-15.15s " "$wc]${file_array[$wc]}"
                     ((w++))
                     ((wc++))
                 done
@@ -222,7 +222,7 @@ show(){
     fi
 }
 
-#--------------------main--------------------#
+
 display_seq(){
     clear_win
     show 1
@@ -234,7 +234,11 @@ display_seq(){
     fi
 }
 
+movefile(){
+    echo test
+}
 
+#--------------------main--------------------#
 Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
 make_window
 
@@ -259,16 +263,26 @@ while true; do
     elif [ "$input" = "/" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf "~cd : "
+        printf " \cd : "
         read dir
+        prev=$(echo $PWD)
         if [ "$dir" = "[]" ]; then
             cd ~/
         elif [ "$dir" = "[" ]; then
-            cd ../
+            cd "$prev"
         fi
         cd "$dir"
         max_rows=0
         display_seq
+    elif [ "$input" = "m" ]; then
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " move : "
+        read temp
+        case $temp in
+            ''|*[!0-9]*) echo bad ;;
+            *) echo test;;
+        esac
     elif [ "$input" = "!" ]; then
         Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
     elif [ "$input" = "q" ]; then
