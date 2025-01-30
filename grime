@@ -239,7 +239,7 @@ movefile(){
 }
 
 #--------------------main--------------------#
-Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
+Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
 make_window
 
 while true; do
@@ -247,6 +247,7 @@ while true; do
     if [ "$input" = "a" ]; then
         max_rows=0
         display_seq
+        prev=$(echo $PWD)
     elif [ "$input" = "h" ]; then
         clear_win
         if [[ "$flag" -eq 1 ]]; then
@@ -263,15 +264,17 @@ while true; do
     elif [ "$input" = "/" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf " \cd : "
+        printf " cd : "
         read dir
-        prev=$(echo $PWD)
         if [ "$dir" = "[]" ]; then
+            prev=$(echo $PWD)
             cd ~/
         elif [ "$dir" = "[" ]; then
             cd "$prev"
+        else
+            prev=$(echo $PWD)
+            cd "$dir"
         fi
-        cd "$dir"
         max_rows=0
         display_seq
     elif [ "$input" = "m" ]; then
@@ -284,7 +287,7 @@ while true; do
             *) echo test;;
         esac
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-q to quit"
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
     elif [ "$input" = "q" ]; then
         tput cnorm
         clear_win
