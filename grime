@@ -234,25 +234,45 @@ display_seq(){
     fi
 }
 
+moveanim(){
+    local ROW=$(tput lines)
+    clear
+    tput cup $(( (ROW / 2) - 11 ))
+    local ctext="░░░░░░░░░▄░░░░░░░░░░░░░░▄░░"
+    local cwidth=$(tput cols)
+    local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
+    printf "%${cpadding}s\033[?25l░░░░░░░░░▄░░░░░░░░░░░░░░▄░░\n"
+    printf "%${cpadding}s░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░\n"
+    printf "%${cpadding}s░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░\n"
+    sleep 0.1
+    clear
+    tput cup $(( (ROW / 2) - 11 ))
+    printf "%${cpadding}s\033[?25l░░░░░░░░░▄░░░░░░░░░░░░░░▄░░\n"
+    printf "%${cpadding}s░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░\n"
+    printf "%${cpadding}s░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░\n"
+    printf "%${cpadding}s░░░░░░░▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐░\n"
+    printf "%${cpadding}s░░░░░▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐░\n"
+    sleep 0.1
+    sleep 1
+    clear
+}
+
 movefile(){
+    fileanim=0
     if [ $# -lt 2 ]; then
-        echo "penguin asks where to move to?"
-        exit
+        echo "penguin asks where to move to?" && sleep 2s
     else
         for i in $@; do
             if [ -e $i ]; then
                 continue
             else
-                echo "penguin don't think it exits : $i "
+                echo "penguin don't think it exits : $i " && sleep 2s
+                fileanim=1
                 break
             fi
         done
         mv $@ 2> /dev/null
     fi
-}
-
-moveanim(){
-    
 }
 
 #--------------------main--------------------#
@@ -300,7 +320,9 @@ while true; do
         printf " move (enter destination folder at the end) : "
         read bob
         movefile $bob
-        moveanim
+        if [ $fileanim -eq 0 ]; then
+            moveanim
+        fi
         max_rows=0
         display_seq 
     elif [ "$input" = "!" ]; then
