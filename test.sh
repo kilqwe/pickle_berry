@@ -1,23 +1,21 @@
 #! /bin/bash
 
-cleanup() {
-    echo
-    echo "Executing cleanup actions..."
-    echo -e "\e[?1000;1006;1015l"
-    echo "Cleanup complete."
-    exit 0 # Exit the script after cleanup
+test(){
+    if [ $# -lt 2 ]; then
+        echo "penguin asks where to move to?"
+        exit
+    else
+        for i in $@; do
+            if [ -e $i ]; then
+                continue
+            else
+                echo "penguin don't think it exits : $i "
+                break
+            fi
+        done
+        mv $@ 2> /dev/null
+    fi
 }
 
-trap cleanup SIGINT
-
-echo -e "\e[?1000;1006;1015h"
-while read -n 12 input; do 
-    if [[ "$input" =~ $'\e\\[<([0-9]+);([0-9]+);([0-9]+)M' ]]; then
-        column="${BASH_REMATCH[2]}"
-        row="${BASH_REMATCH[3]}"
-        button="${BASH_REMATCH[1]}"
-        echo "$row,$column,$button"
-    fi
-done
-
-
+read bob
+test $bob 
