@@ -236,25 +236,75 @@ display_seq(){
 
 moveanim(){
     local ROW=$(tput lines)
-    clear
-    tput cup $(( (ROW / 2) - 11 ))
-    local ctext="░░░░░░░░░▄░░░░░░░░░░░░░░▄░░"
+    clear_win
+    local ctext="╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒"
     local cwidth=$(tput cols)
     local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
-    printf "%${cpadding}s\033[?25l░░░░░░░░░▄░░░░░░░░░░░░░░▄░░\n"
-    printf "%${cpadding}s░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░\n"
-    printf "%${cpadding}s░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░\n"
-    sleep 0.1
-    clear
-    tput cup $(( (ROW / 2) - 11 ))
-    printf "%${cpadding}s\033[?25l░░░░░░░░░▄░░░░░░░░░░░░░░▄░░\n"
-    printf "%${cpadding}s░░░░░░░░▌▒█░░░░░░░░░░░▄▀▒▌░\n"
-    printf "%${cpadding}s░░░░░░░░▌▒▒█░░░░░░░░▄▀▒▒▒▐░\n"
-    printf "%${cpadding}s░░░░░░░▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐░\n"
-    printf "%${cpadding}s░░░░░▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐░\n"
-    sleep 0.1
-    sleep 1
-    clear
+    for ((i=0;i<1;i++)) do
+        clear
+        tput cup $(( (ROW - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW  - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████ ▗▗▗      ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████   ▗▗▗    ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████     ▗▗▗  ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████      ▗▗▗ ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████      ▗▗▗ ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████    ▗▗▗   ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████  ▗▗▗     ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
+        printf "%${cpadding}s║███████ ▗▗▗      ║███████\n"
+        printf "%${cpadding}s║███████          ║███████\n"
+        printf "%${cpadding}s╚══════╝          ╚══════╝\n"
+        sleep 0.3
+    done
 }
 
 movefile(){
@@ -263,7 +313,7 @@ movefile(){
         echo "penguin asks where to move to?" && sleep 2s
     else
         for i in $@; do
-            if [ -e $i ]; then
+            if [ -e $i ] || [ $i = "~/" ]; then
                 continue
             else
                 echo "penguin don't think it exits : $i " && sleep 2s
