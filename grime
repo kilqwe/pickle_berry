@@ -328,6 +328,25 @@ movefile(){
     fi
 }
 
+rename(){
+    local flag=2
+    if [ $# -ne 2 ]; then
+        echo "Enter the file/directory followed by the new name" && sleep 2s
+    else
+        if [ -e $1 ]; then
+            flag=0
+            continue
+        else
+            echo "penguin don't think it exits : $1 " && sleep 2s
+            flag=1
+            break
+        fi
+        if [ "$flag" -eq 0 ]; then
+            mv $@ 2> /dev/null
+        fi
+    fi
+}
+
 #--------------------main--------------------#
 Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
 make_window
@@ -378,6 +397,14 @@ while true; do
         fi
         max_rows=0
         display_seq 
+    elif [ "$input" = "r" ]; then
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " rename (enter new name at the end) : "
+        read bob
+        rename $bob
+        max_rows=0
+        display_seq
     elif [ "$input" = "!" ]; then
         Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
     elif [ "$input" = "q" ]; then
