@@ -242,21 +242,21 @@ moveanim(){
     local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
     for ((i=0;i<1;i++)) do
         clear
-        tput cup $(( (ROW - 4 ))
+        tput cup $(( (ROW / 2) - 4 ))
         printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
         printf "%${cpadding}s║███████          ║███████\n"
         printf "%${cpadding}s║███████          ║███████\n"
         printf "%${cpadding}s╚══════╝          ╚══════╝\n"
         sleep 0.3
         clear
-        tput cup $(( (ROW  - 4 ))
+        tput cup $(( (ROW / 2) - 4 ))
         printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
         printf "%${cpadding}s║███████ ▗▗▗      ║███████\n"
         printf "%${cpadding}s║███████          ║███████\n"
         printf "%${cpadding}s╚══════╝          ╚══════╝\n"
         sleep 0.3
         clear
-        tput cup $(( (ROW - 4 ))
+        tput cup $(( (ROW / 2) - 4 ))
         printf "%${cpadding}s\033[?25l╔▒▀▀▀▒▒▒          ╔▒▀▀▀▒▒▒\n"
         printf "%${cpadding}s║███████   ▗▗▗    ║███████\n"
         printf "%${cpadding}s║███████          ║███████\n"
@@ -308,12 +308,13 @@ moveanim(){
 }
 
 movefile(){
-    fileanim=0
+    fileanim=2
     if [ $# -lt 2 ]; then
         echo "penguin asks where to move to?" && sleep 2s
     else
         for i in $@; do
             if [ -e $i ] || [ $i = "~/" ]; then
+                fileanim=0
                 continue
             else
                 echo "penguin don't think it exits : $i " && sleep 2s
@@ -321,7 +322,9 @@ movefile(){
                 break
             fi
         done
-        mv $@ 2> /dev/null
+        if [ "$fileanim" -eq 0 ]; then
+            mv $@ 2> /dev/null
+        fi
     fi
 }
 
