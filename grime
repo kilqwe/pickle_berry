@@ -307,6 +307,51 @@ moveanim(){
     done
 }
 
+copyanim(){
+    local ROW=$(tput lines)
+    clear_win
+    local ctext="   █▀▀▀▀▀▄"
+    local cwidth=$(tput cols)
+    local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
+    for ((i=0;i<3;i++)) do
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█▀▀▀▀▀▄\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█#####█\n"
+        printf "%${cpadding}s║█▄▄▄▄▄█\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l  █▀▀▀▀▀▄\n"
+        printf "%${cpadding}s╔═█     █\n"
+        printf "%${cpadding}s║ █#####█\n"
+        printf "%${cpadding}s║ █▄▄▄▄▄█\n"
+        printf "%${cpadding}s║      ║\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l   █▀▀▀▀▀▄\n"
+        printf "%${cpadding}s╔═════─┐ █\n"
+        printf "%${cpadding}s║  █###│#█\n"
+        printf "%${cpadding}s║  █▄▄▄║▄█\n"
+        printf "%${cpadding}s║      ║\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l  █▀▀▀▀▀▄\n"
+        printf "%${cpadding}s╔═════─┐█\n"
+        printf "%${cpadding}s║ █####│█\n"
+        printf "%${cpadding}s║ █▄▄▄▄║█\n"
+        printf "%${cpadding}s║      ║\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+    done
+}
+
 Flap-Travel(){
     fileanim=2
     if [ $# -lt 2 ]; then
@@ -348,7 +393,41 @@ Waddle-Name(){
 }
 
 Fish-Borrow(){
-
+    local flag=1
+    eval last=\${$#}
+    if [ -f $last ]; then
+        max_rows=0
+        display_seq
+        tput cup $(( $ll - 2 )) 3
+        printf " penguin asks if you want to rewrite (Y/n) : "
+        read choice
+        if [ "$choice" = "y" ] || [ "$choice" = "Y" ] || [ "$choice" = "" ]; then
+            echo "rewriting $last"
+            flag=1
+        else
+            flag=0
+            return 
+        fi
+    else 
+        flag=1
+    fi
+    if [ $# -lt 2 ]; then
+        echo "penguin says invalid input," 
+        echo "give atleast souce file/directory and destination file/directory"
+    else
+        for i in $@; do
+            if [ -e $i ] || [ "$i" = "$last" ]; then
+                continue
+            else
+                echo "penguin don't think $i exits"
+                break
+            fi
+        done
+        if [ "$flag" -eq 1 ]; then
+            cp $@ 2> /dev/null
+            copyanim
+        fi
+    fi
 }
 
 #--------------------main--------------------#
@@ -409,14 +488,14 @@ while true; do
         Waddle-Name $bob
         max_rows=0
         display_seq
-    #elif [ "$input" = "c" ]; then
-    #    ll=$(tput lines)
-    #    tput cup $(( $ll - 2 )) 3
-    #    printf " copy (enter destination folder at the end) : "
-    #    read bob
-    #    Fish-Borrow $bob
-    #    max_rows=0
-    #    display_seq
+    elif [ "$input" = "c" ]; then
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " copy (enter destination folder at the end) : "
+        read bob
+        Fish-Borrow $bob
+        max_rows=0
+        display_seq
     elif [ "$input" = "!" ]; then
         Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
     elif [ "$input" = "q" ]; then

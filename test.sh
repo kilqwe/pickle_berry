@@ -24,7 +24,7 @@ test(){
             if [ -e $i ] || [ "$i" = "$last" ]; then
                 continue
             else
-                echo "penguin don't think it exits : $i "
+                echo "penguin don't think $i exits"
                 break
             fi
         done
