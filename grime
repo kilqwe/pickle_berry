@@ -307,7 +307,7 @@ moveanim(){
     done
 }
 
-movefile(){
+Flap-Travel(){
     fileanim=2
     if [ $# -lt 2 ]; then
         echo "penguin asks where to move to?" && sleep 2s
@@ -328,7 +328,7 @@ movefile(){
     fi
 }
 
-rename(){
+Waddle-Name(){
     local flag=2
     if [ $# -ne 2 ]; then
         echo "Enter the file/directory followed by the new name" && sleep 2s
@@ -345,6 +345,10 @@ rename(){
             mv $@ 2> /dev/null
         fi
     fi
+}
+
+Fish-Borrow(){
+
 }
 
 #--------------------main--------------------#
@@ -391,7 +395,7 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf " move (enter destination folder at the end) : "
         read bob
-        movefile $bob
+        Flap-Travel $bob
         if [ $fileanim -eq 0 ]; then
             moveanim
         fi
@@ -402,9 +406,17 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf " rename (enter new name at the end) : "
         read bob
-        rename $bob
+        Waddle-Name $bob
         max_rows=0
         display_seq
+    #elif [ "$input" = "c" ]; then
+    #    ll=$(tput lines)
+    #    tput cup $(( $ll - 2 )) 3
+    #    printf " copy (enter destination folder at the end) : "
+    #    read bob
+    #    Fish-Borrow $bob
+    #    max_rows=0
+    #    display_seq
     elif [ "$input" = "!" ]; then
         Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
     elif [ "$input" = "q" ]; then
