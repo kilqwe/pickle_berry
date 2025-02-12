@@ -431,10 +431,10 @@ Fish-Borrow(){
 }
 
 Snow-Sweep(){
-
+    echo
 }
 
-Belly-Flop(){
+Belly-Flop(){ 
     echo 
 }
 
