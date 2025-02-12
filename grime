@@ -430,12 +430,46 @@ Fish-Borrow(){
     fi
 }
 
+Snow-Sweep(){
+
+}
+
+Belly-Flop(){
+    echo 
+}
+
+startup(){
+    local ROW=$(tput lines)
+    clear_win
+    tput cup $(( (ROW / 2) - 4 ))
+cat << "EOF"
+    __        
+ -=(o '.
+    '.-.\
+    /|  \\      ░▒█▀▀█░█▀▀▄░░▀░░█▀▄▀█░█▀▀░░░░░
+    '|  ||      ░▒█░▄▄░█▄▄▀░░█▀░█░▀░█░█▀▀░▄▄░░
+    _\_):,_     ░▒█▄▄▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀░▀▀░░
+
+EOF
+    make_window
+    sleep 1s 
+    max_rows=0 
+    display_seq 
+    prev=$(echo $PWD)
+    chk="no"
+}
+
 #--------------------main--------------------#
-Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
-make_window
+startup
 
 while true; do
     read -rsn1 input
+
+    if [ "$input" = "!" ] && [ "$chk" = "penglin" ] ; then
+        input="a"
+        chk="no"
+    fi
+
     if [ "$input" = "a" ]; then
         max_rows=0
         display_seq
@@ -496,8 +530,25 @@ while true; do
         Fish-Borrow $bob
         max_rows=0
         display_seq
+    elif [ "$input" = "x" ]; then
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " DELETE FILES : "
+        read bob
+        Snow-Sweep $bob
+        max_rows=0
+        display_seq
+    elif [ "$input" = "o" ]; then
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " Open Files ? : "
+        read bob
+        Belly-Flop $bob
+        max_rows=0
+        display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-a to show files" "-h toggle hidden files" "-! for this help message" "-/ change directory" "-m to move files and folders" "-q to quit"
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-q to quit" "   "
+        chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
         clear_win
