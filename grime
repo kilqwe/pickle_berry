@@ -431,7 +431,24 @@ Fish-Borrow(){
 }
 
 Snow-Sweep(){
-    echo
+    local inp
+    undo=$1
+    undodir=$(echo $PWD)
+    if [ $# -ne 1 ]; then
+        echo "penguin can not delete mutiple files/folders" && sleep 2s
+    elif [ "$1" = "/" ] || [ "$1" = "//" ] ; then
+        echo "penguin will not perform this action" && sleep 2s
+    elif [ -e $1 ]; then
+        make_window
+        tput cup $(( $ll - 2 )) 3
+        printf " DELETE $1? (y/n) : "
+        read inp
+        if [ "$inp" = "y" ] && [ -f $1 ]; then
+            mv $1 ~/.local/share/Trash/files 2> /dev/null
+        fi
+    else
+        echo "penguin don't think $1 exits" && sleep 2s
+    fi
 }
 
 Belly-Flop(){ 
@@ -457,6 +474,7 @@ EOF
     display_seq 
     prev=$(echo $PWD)
     chk="no"
+    undo="bob.penglin067"
 }
 
 #--------------------main--------------------#
@@ -497,6 +515,9 @@ while true; do
             cd ~/
         elif [ "$dir" = "[" ]; then
             cd "$prev"
+        elif [ "$dir" = "trash" ]; then
+            prev=$(echo $PWD)
+            cd ~/.local/share/Trash/files
         else
             prev=$(echo $PWD)
             cd "$dir"
@@ -533,9 +554,13 @@ while true; do
     elif [ "$input" = "x" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf " DELETE FILES : "
+        printf " DELETE FILE/FOLDER : "
         read bob
         Snow-Sweep $bob
+        max_rows=0
+        display_seq
+    elif [ "$input" = "u" ] && [ -e ~/.local/share/Trash/files/$undo ]; then
+        mv ~/.local/share/Trash/files/$undo $undodir
         max_rows=0
         display_seq
     elif [ "$input" = "o" ]; then
@@ -553,5 +578,11 @@ while true; do
         tput cnorm
         clear_win
         break
+    else 
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        echo " invalid input " && sleep 2s
+        max_rows=0
+        display_seq
     fi
 done

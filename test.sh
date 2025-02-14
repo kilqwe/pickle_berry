@@ -2,12 +2,13 @@
 
 test(){
     local inp
+    undo=$1
     if [ $# -ne 1 ]; then
         echo "penguin can not delete mutiple files/folders" && sleep 2s
     elif [ "$1" = "/" ] || [ "$1" = "//" ] ; then
         echo "penguin will not perform this action" && sleep 2s
     elif [ -e $1 ]; then
-        #tput cup $(( $ll - 2 )) 3
+        tput cup $(( $ll - 2 )) 3
         printf " DELETE $1? (y/n) : "
         read inp
         if [ "$inp" = "y" ] && [ -f $1 ]; then
