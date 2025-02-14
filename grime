@@ -445,6 +445,7 @@ Snow-Sweep(){
         read inp
         if [ "$inp" = "y" ] && [ -f $1 ]; then
             mv $1 ~/.local/share/Trash/files 2> /dev/null
+            echo "USE -u TO UNDO CHANGES" && sleep 1s
         fi
     else
         echo "penguin don't think $1 exits" && sleep 2s
@@ -551,6 +552,11 @@ while true; do
         Fish-Borrow $bob
         max_rows=0
         display_seq
+    #elif [ "$bob" = "t" ]; then
+    #    make_window
+    #    ll=$(tput lines)
+    #    tput cup $(( $ll - 2 )) 3
+    #    printf " Empty TRASH ?? : "
     elif [ "$input" = "x" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
@@ -572,7 +578,7 @@ while true; do
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-q to quit" "   "
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-q to quit" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
