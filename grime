@@ -431,21 +431,7 @@ Fish-Borrow(){
 }
 
 Snow-Sweep(){
-    local inp
-    if [ $# -ne 1 ]; then
-        echo "penguin can not work on mutiple files/folders" && sleep 2s
-    else
-        tput cup $(( $ll - 2 )) 3
-        printf " DELETE $1 ? (y/n)"
-        read inp
-        if [ -f $1 ] && [ "$inp" = "y" ]; then
-            echo
-        else
-            echo "penguin don't think it exits : $1 " && sleep 2s
-            flag=1
-            break
-        fi
-    fi
+    echo
 }
 
 Belly-Flop(){ 
