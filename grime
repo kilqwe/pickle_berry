@@ -20,8 +20,8 @@ clear_win() {
 fnf() {
     local hide="$1"
     if [ "$hide" = 1 ]; then
-        folders=$(ls -d */)
-        files=$(ls -p | grep -v /)
+        folders=$(find . -maxdepth 1 -type d -not -path '*/.*' -printf '%f\n')
+        files=$(find . -maxdepth 1 -type f -not -name '.*' -printf '%f\n')
     else
         folders=$(ls -Ap | grep / | grep "^.")
         files=$(ls -Ap | grep -v / | grep "^.")
