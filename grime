@@ -442,8 +442,8 @@ Snow-Sweep(){
         make_window
         tput cup $(( $ll - 2 )) 3
         printf " DELETE $1? (y/n) : "
-        read inp
-        if [ "$inp" = "y" ] && [ -f $1 ]; then
+        read -rsn1 inp
+        if [ "$inp" = "y" ]; then
             mv $1 ~/.local/share/Trash/files 2> /dev/null
             echo "USE -u TO UNDO CHANGES" && sleep 1s
         fi
@@ -525,6 +525,10 @@ while true; do
         fi
         max_rows=0
         display_seq
+        if [[ "$PWD" = ~/.local/share/Trash/files ]]; then
+            tput cup $(( $ll - 2 )) 3
+            printf " -t TO EMPTY TRASH "
+        fi
     elif [ "$input" = "m" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
@@ -556,7 +560,13 @@ while true; do
         make_window
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf " Empty TRASH ?? : "
+        printf " Empty TRASH (y/n) : "
+        read -rsn1 bob
+        if [ "$bob" = "y" ]; then
+            rm -rf ~/.local/share/Trash/files/*
+        fi
+        max_rows=0
+        display_seq
     elif [ "$input" = "x" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
