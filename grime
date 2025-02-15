@@ -510,18 +510,18 @@ while true; do
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         printf " cd : "
-        read dir
-        if [ "$dir" = "[]" ]; then
+        read bob
+        if [ "$bob" = "[]" ]; then
             prev=$(echo $PWD)
             cd ~/
-        elif [ "$dir" = "[" ]; then
+        elif [ "$bob" = "[" ]; then
             cd "$prev"
-        elif [ "$dir" = "trash" ]; then
+        elif [ "$bob" = "trash" ]; then
             prev=$(echo $PWD)
             cd ~/.local/share/Trash/files
         else
             prev=$(echo $PWD)
-            cd "$dir"
+            cd "$bob"
         fi
         max_rows=0
         display_seq
@@ -552,11 +552,11 @@ while true; do
         Fish-Borrow $bob
         max_rows=0
         display_seq
-    #elif [ "$bob" = "t" ]; then
-    #    make_window
-    #    ll=$(tput lines)
-    #    tput cup $(( $ll - 2 )) 3
-    #    printf " Empty TRASH ?? : "
+    elif [ "$input" = "t" ] && [ "$bob" = "trash" ]; then
+        make_window
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " Empty TRASH ?? : "
     elif [ "$input" = "x" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
