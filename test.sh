@@ -7,9 +7,11 @@ test(){
     elif [ $# -lt 1 ]; then
         echo "penguin has to open somthing ??" && sleep 2s
     elif [ -e $1 ]; then
-        #make_window
-        #tput cup $(( $ll - 2 )) 3
-        vim $1 && ./Documents/grime/test.sh
+        if [[ $file == =~ \.html$ ]]; then #regular expression to accept mutiple dots in thier name eg: test.test.html
+            inp=$(grep -il "MimeType=.*text/html" /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/.desktop//')
+        else
+            xdg-open $1
+        fi
     else
         echo "penguin don't think $1 exits" && sleep 2s
     fi
