@@ -432,21 +432,22 @@ Fish-Borrow(){
 
 Snow-Sweep(){
     local inp
-    undo=$1
-    undodir=$(echo $PWD)
+    undo="$1"
+    undodir="$PWD"
     if [ $# -gt 1 ]; then
         echo "penguin can not delete mutiple files/folders" && sleep 2s
     elif [ $# -eq 0 ]; then
         echo "penguin cannot delete nothing" && sleep 2s
     elif [ "$1" = "/" ] || [ "$1" = "//" ] ; then
         echo "penguin will not perform this action" && sleep 2s
-    elif [ -e $1 ]; then
+    elif [ -e "$1" ]; then
         make_window
         tput cup $(( $ll - 2 )) 3
         printf " DELETE $1? (y/n) : "
         read -rsn1 inp
         if [ "$inp" = "y" ]; then
-            mv $1 ~/.local/share/Trash/files 2> /dev/null
+            mv "$1" ~/.local/share/Trash/files 2> /dev/null
+            trash_file="$HOME/.local/share/Trash/files/$undo"
             echo "USE -u TO UNDO CHANGES" && sleep 1s
         fi
     else
@@ -599,11 +600,11 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf " DELETE FILE/FOLDER : "
         read bob
-        Snow-Sweep $bob
+        Snow-Sweep "$bob"
         max_rows=0
         display_seq
-    elif [ "$input" = "u" ] && [ -e ~/.local/share/Trash/files/$undo ]; then
-        mv ~/.local/share/Trash/files/$undo $undodir
+    elif [ "$input" = "u" ] && [ -e "$trash_file" ]; then
+        mv "$trash_file" "$undodir"
         max_rows=0
         display_seq
     elif [ "$input" = "o" ]; then
@@ -624,7 +625,7 @@ while true; do
     else 
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        echo " invalid input " && sleep 2s
+        echo " invalid input " && sleep 1s
         max_rows=0
         display_seq
     fi
