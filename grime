@@ -434,8 +434,10 @@ Snow-Sweep(){
     local inp
     undo=$1
     undodir=$(echo $PWD)
-    if [ $# -ne 1 ]; then
+    if [ $# -gt 1 ]; then
         echo "penguin can not delete mutiple files/folders" && sleep 2s
+    elif [ $# -eq 0 ]; then
+        echo "penguin cannot delete nothing" && sleep 2s
     elif [ "$1" = "/" ] || [ "$1" = "//" ] ; then
         echo "penguin will not perform this action" && sleep 2s
     elif [ -e $1 ]; then
@@ -455,12 +457,13 @@ Snow-Sweep(){
 Belly-Flop(){ 
     local brow
     local code
+    local inp
     if [ $# -gt 1 ]; then
         echo "penguin can not open mutiple files/folders" && sleep 2s
     elif [ $# -lt 1 ]; then
         echo "penguin has to open somthing ??" && sleep 2s
     elif [ -e $1 ]; then
-        if [[ $file == \.html$ ]]; then 
+        if [[ $1 =~ \.html$ ]]; then 
             brow=$(grep -il "MimeType=.*text/html" /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/.desktop//')
             code=$(xdg-mime query default text/plain | sed 's/.desktop//')
             make_window
