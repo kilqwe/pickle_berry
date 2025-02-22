@@ -460,9 +460,18 @@ Belly-Flop(){
     elif [ $# -lt 1 ]; then
         echo "penguin has to open somthing ??" && sleep 2s
     elif [ -e $1 ]; then
-        if [[ $file == =~ \.html$ ]]; then #regular expression to accept mutiple dots in thier name eg: test.test.html
+        if [[ $file == \.html$ ]]; then 
             brow=$(grep -il "MimeType=.*text/html" /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/.desktop//')
             code=$(xdg-mime query default text/plain | sed 's/.desktop//')
+            make_window
+            tput cup $(( $ll - 2 )) 3
+            printf " penguin detects a html file, open with browser ? (y/n) : "
+            read -rsn1 inp
+            if [ "$inp" = "y" ]; then
+                $brow $1
+            else
+                $code $1 
+            fi
         else
             xdg-open $1
         fi

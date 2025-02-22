@@ -8,7 +8,7 @@ test(){
     elif [ $# -lt 1 ]; then
         echo "penguin has to open somthing ??" && sleep 2s
     elif [ -e $1 ]; then
-        if [[ $file == =~ \.html$ ]]; then #regular expression to accept mutiple dots in thier name eg: test.test.html
+        if [[ $file == \.html$ ]]; then
             brow=$(grep -il "MimeType=.*text/html" /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/.desktop//')
             code=$(xdg-mime query default text/plain | sed 's/.desktop//')
         else
