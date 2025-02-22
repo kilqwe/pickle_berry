@@ -448,7 +448,7 @@ Snow-Sweep(){
         if [ "$inp" = "y" ]; then
             mv "$1" ~/.local/share/Trash/files 2> /dev/null
             trash_file="$HOME/.local/share/Trash/files/$undo"
-            echo "USE -u TO UNDO CHANGES" && sleep 1s
+            printf "\nUSE -u TO UNDO CHANGES" && sleep 1s
         fi
     else
         echo "penguin don't think $1 exits" && sleep 2s
