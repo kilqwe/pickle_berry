@@ -462,8 +462,8 @@ Belly-Flop(){
         echo "penguin can not open mutiple files/folders" && sleep 2s
     elif [ $# -lt 1 ]; then
         echo "penguin has to open somthing ??" && sleep 2s
-    elif [ -e $1 ]; then
-        if [[ $1 =~ \.html$ ]]; then 
+    elif [ -e "$1" ]; then
+        if [[ "$1" =~ \.html$ ]]; then 
             brow=$(grep -il "MimeType=.*text/html" /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/.desktop//')
             code=$(xdg-mime query default text/plain | sed 's/.desktop//')
             make_window
@@ -471,12 +471,12 @@ Belly-Flop(){
             printf " penguin detects a html file, open with browser ? (y/n) : "
             read -rsn1 inp
             if [ "$inp" = "y" ]; then
-                $brow $1
+                $brow "$1" 2> /dev/null
             else
-                $code $1 
+                $code "$1" 2> /dev/null
             fi
         else
-            xdg-open $1
+            xdg-open "$1" 2> /dev/null
         fi
     else
         echo "penguin don't think $1 exits" && sleep 2s
@@ -611,11 +611,11 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf " Open Files ? : "
         read bob
-        Belly-Flop $bob
+        Belly-Flop "$bob"
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-q to quit" "   "
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
