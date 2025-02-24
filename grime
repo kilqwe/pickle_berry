@@ -606,6 +606,15 @@ while true; do
         fi
         max_rows=0
         display_seq
+    elif [ "$input" = "t" ]; then
+        make_window
+        ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " Execute Commands : "
+        read bob
+        $bob
+        max_rows=0
+        display_seq
     elif [ "$input" = "x" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
