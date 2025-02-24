@@ -476,6 +476,17 @@ Belly-Flop(){
             else
                 $code "$1" 2> /dev/null
             fi
+        elif [ -d "$1" ]; then
+            code=$(xdg-mime query default text/plain | sed 's/.desktop//')
+            make_window
+            tput cup $(( $ll - 2 )) 3
+            printf " penguin detects a Directory, open with code editor ? (y/n) : "
+            read -rsn1 inp
+            if [ "$inp" = "y" ]; then
+                $code "$1" 2> /dev/null
+            else
+                xdg-open "$1" 2> /dev/null
+            fi
         else
             xdg-open "$1" 2> /dev/null
         fi
