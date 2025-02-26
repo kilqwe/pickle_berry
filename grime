@@ -569,6 +569,8 @@ while true; do
         display_seq
     elif [ "$input" = "[" ]; then
         ll=$(tput lines)
+        tput cup $(( $ll - 2 )) 3
+        printf " [ back - ] home - x trash "
         read -rsn1 bob
         if [ "$bob" = "]" ]; then
             prev=$(echo $PWD)
@@ -651,7 +653,7 @@ while true; do
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "   "
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-[ quick travel" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
