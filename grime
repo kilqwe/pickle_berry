@@ -28,6 +28,21 @@ fnf() {
     fi
 }
 
+fnfind() {
+    local fol="$1"
+    if [ "$flag" = 1 ] && [ "$fol" = 1 ]; then
+        echo $(find . -maxdepth 1 -type d -not -path '*/.*' -printf '%f\n'| fzf  --layout=reverse --border=bold --border=rounded --margin=10%)
+    elif [ "$flag" = 1 ] && [ "$fol" = 0 ]; then
+        echo $(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf  --layout=reverse --border=bold --border=rounded --margin=10%)
+    elif [ "$flag" = 0 ] && [ "$fol" = 1 ]; then
+        echo $(ls -Ap | grep / | grep "^." | fzf  --layout=reverse --border=bold --border=rounded --margin=10%)
+    elif [ "$flag" = 0 ] && [ "$fol" = 0 ]; then
+        echo $(ls -a| fzf  --layout=reverse --border=bold --border=rounded --margin=10%)
+    else 
+        echo 0
+    fi
+}
+
 make_window() {
     tput cup 0 0 
     local COL=$( tput cols )
@@ -549,7 +564,7 @@ while true; do
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         printf " cd : "
-        read bob
+        bob=$(fnfind 1)
         if [ "$bob" = "[]" ]; then
             prev=$(echo $PWD)
             cd ~/
@@ -619,8 +634,7 @@ while true; do
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         printf " DELETE FILE/FOLDER : "
-        read bob
-        Snow-Sweep "$bob"
+        Snow-Sweep $(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf  --layout=reverse --border=bold --border=rounded --margin=10% --color=dark)
         max_rows=0
         display_seq
     elif [ "$input" = "u" ] && [ -e "$trash_file" ]; then
@@ -631,8 +645,7 @@ while true; do
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         printf " Open Files ? : "
-        read bob
-        Belly-Flop "$bob"
+        Belly-Flop $(find . -maxdepth 1 -type d -not -path '*/.*' -printf '%f\n'| fzf  --layout=reverse --border=bold --border=rounded --margin=10% )
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
