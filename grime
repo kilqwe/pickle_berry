@@ -683,6 +683,11 @@ while true; do
         cd "$bob"
         max_rows=0
         display_seq
+    elif [ "$input" = "<" ]; then
+        prev=$(echo $PWD)
+        cd ../
+        max_rows=0
+        display_seq
     elif [ "$input" = "[" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
@@ -705,10 +710,16 @@ while true; do
         fi
     elif [ "$input" = "m" ]; then
         ll=$(tput lines)
+        if [ "$flag" = 1 ]; then
+            bob=$(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+        elif [ "$flag" = 0 ]; then
+            bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+        fi
+        tput civis
         tput cup $(( $ll - 2 )) 3
-        printf " move (enter destination folder at the end) : "
-        read bob
-        Flap-Travel $bob
+        printf " enter destination folder  : "
+        read bob2
+        Flap-Travel $bob $bob2
         if [ $fileanim -eq 0 ]; then
             moveanim
         fi
@@ -717,9 +728,11 @@ while true; do
     elif [ "$input" = "r" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf " rename (enter new name at the end) : "
-        read bob
-        Waddle-Name $bob
+        bob=$(fnfind 0)
+        tput civis
+        printf " enter new name : "
+        read bob2
+        Waddle-Name $bob $bob2
         max_rows=0
         display_seq
     elif [ "$input" = "c" ]; then
@@ -731,7 +744,7 @@ while true; do
         fi
         tput civis
         tput cup $(( $ll - 2 )) 3
-        printf " enter destination folder at the end : "
+        printf " enter destination folder or coplied file name : "
         read bob2
         Fish-Borrow $bob $bob2
         max_rows=0
@@ -784,7 +797,7 @@ while true; do
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-[ quick travel" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "   "
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-< back" "-[ quick travel" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
