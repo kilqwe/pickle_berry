@@ -708,6 +708,12 @@ while true; do
             prev=$(echo $PWD)
             read bob2
             cd "$bob2"
+        else
+            ll=$(tput lines)
+            tput cup $(( $ll - 2 )) 3
+            echo " invalid input " && sleep 1s
+            max_rows=0
+            display_seq
         fi
         max_rows=0
         display_seq
