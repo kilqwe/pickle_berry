@@ -691,7 +691,7 @@ while true; do
     elif [ "$input" = "[" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf " [ back - ] home - t trash "
+        printf " [ back - ] home - t trash - / type location "
         read -rsn1 bob
         if [ "$bob" = "]" ]; then
             prev=$(echo $PWD)
@@ -701,6 +701,13 @@ while true; do
         elif [ "$bob" = "t" ]; then
             prev=$(echo $PWD)
             cd ~/.local/share/Trash/files
+        elif [ "$bob" = "/" ]; then
+            make_window
+            tput cup $(( $ll - 2 )) 3
+            printf " type location : "
+            prev=$(echo $PWD)
+            read bob2
+            cd "$bob2"
         fi
         max_rows=0
         display_seq
