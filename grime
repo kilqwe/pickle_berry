@@ -561,21 +561,23 @@ while true; do
             display_seq
         fi
     elif [ "$input" = "/" ]; then
-        ll=$(tput lines)
-        tput cup $(( $ll - 2 )) 3
-        printf " cd : "
         bob=$(fnfind 1)
-        if [ "$bob" = "[]" ]; then
+        tput civis
+        prev=$(echo $PWD)
+        cd "$bob"
+        max_rows=0
+        display_seq
+    elif [ "$input" = "[" ]; then
+        ll=$(tput lines)
+        read -rsn1 bob
+        if [ "$bob" = "]" ]; then
             prev=$(echo $PWD)
             cd ~/
         elif [ "$bob" = "[" ]; then
             cd "$prev"
-        elif [ "$bob" = "trash" ]; then
+        elif [ "$bob" = "x" ]; then
             prev=$(echo $PWD)
             cd ~/.local/share/Trash/files
-        else
-            prev=$(echo $PWD)
-            cd "$bob"
         fi
         max_rows=0
         display_seq
@@ -610,7 +612,7 @@ while true; do
         Fish-Borrow $bob
         max_rows=0
         display_seq
-    elif [ "$input" = "t" ] && [ "$bob" = "trash" ]; then
+    elif [ "$input" = "t" ] && [ "$bob" = "x" ]; then
         make_window
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
