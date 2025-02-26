@@ -608,10 +608,15 @@ while true; do
         display_seq
     elif [ "$input" = "c" ]; then
         ll=$(tput lines)
+        if [ "$flag" = 1 ]; then
+            bob=$(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+        elif [ "$flag" = 0 ]; then
+            bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+        fi
         tput cup $(( $ll - 2 )) 3
-        printf " copy (enter destination folder at the end) : "
-        read bob
-        Fish-Borrow $bob
+        printf " enter destination folder at the end : "
+        read bob2
+        Fish-Borrow $bob $bob2
         max_rows=0
         display_seq
     elif [ "$input" = "t" ] && [ "$bob" = "x" ]; then
