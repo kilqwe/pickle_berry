@@ -328,7 +328,7 @@ copyanim(){
     local ctext="   █▀▀▀▀▀▄"
     local cwidth=$(tput cols)
     local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
-    for ((i=0;i<3;i++)) do
+    for ((i=0;i<2;i++)) do
         clear
         tput cup $(( (ROW / 2) - 4 ))
         printf "%${cpadding}s\033[?25l╔█▀▀▀▀▀▄\n"
@@ -365,6 +365,121 @@ copyanim(){
         printf "%${cpadding}s╚══════╝\n"
         sleep 0.3
     done
+}
+
+trashanim(){
+    local ROW=$(tput lines)
+    clear_win
+    local ctext="   █▀▀▀▀▀▄"
+    local cwidth=$(tput cols)
+    local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
+    for ((i=0;i<1;i++)) do
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█▀▀▀▀▀▄\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█▄▄▄▄▄█\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█#▀▀▀▀▄\n"
+        printf "%${cpadding}s║█ ##  █\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█▄▄▄▄▄█\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█##▀▀▀▄\n"
+        printf "%${cpadding}s║█ ##  █\n"
+        printf "%${cpadding}s║█   # █\n"
+        printf "%${cpadding}s║█#▄▄▄▄█\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█##▀▀▀▄\n"
+        printf "%${cpadding}s║█ ##  █\n"
+        printf "%${cpadding}s########\n"
+        printf "%${cpadding}s########\n"
+        printf "%${cpadding}s########\n"
+        printf "%${cpadding}s  ## #  \n"
+        printf "%${cpadding}s  #     \n"
+        sleep 0.3
+    done
+}
+
+delanim(){
+    local ROW=$(tput lines)
+    clear_win
+    local ctext="   █▀▀▀▀▀▄"
+    local cwidth=$(tput cols)
+    local cpadding=$(( (cwidth - ${#ctext}) / 2 ))
+    for ((i=0;i<1;i++)) do
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█▀▀▀▀▀▄\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█#####█\n"
+        printf "%${cpadding}s║█▄▄▄▄▄█\n"
+        printf "%${cpadding}s╚══════╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█▀▀▀▀▀▄\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█#####█\n"
+        printf "%${cpadding}s║█▄▄▄▄▄█\n"
+        printf "%${cpadding}s╚═│═│═│╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█▀▀▀▀▀▄\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█│#│#│█\n"
+        printf "%${cpadding}s║█│▄│▄│█\n"
+        printf "%${cpadding}s╚═│═│═│╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█│▀│▀│▄\n"
+        printf "%${cpadding}s║█│ │ │█\n"
+        printf "%${cpadding}s║█│#│#│█\n"
+        printf "%${cpadding}s║█│▄│▄│█\n"
+        printf "%${cpadding}s╚═│═│═│╝\n"
+        sleep 0.3
+        clear
+        tput cup $(( (ROW / 2) - 4 ))
+        printf "%${cpadding}s\033[?25l╔█ ▀ ▀ ▄\n"
+        printf "%${cpadding}s║█     █\n"
+        printf "%${cpadding}s║█ # # █\n"
+        printf "%${cpadding}s║█ ▄ ▄ █\n"
+        printf "%${cpadding}s╚═ ═ ═ ╝\n"
+        sleep 0.3
+    done
+}
+
+#taken from basil
+Line_sweep(){
+    sleep 0.01
+    [[ $LINES ]] || LINES=$(tput lines)
+    [[ $COLUMNS ]] || COLUMNS=$(tput cols)
+    tput civis
+    for (( i=0; i<$LINES; i++ ))
+    do
+    clear
+    if [ $i -gt 0 ]
+    then
+    n=$(($i-1))
+    eval printf "$'\n%.0s'" {0..$n}
+    fi
+    eval printf %.1s '$((RANDOM & 1))'{1..$COLUMNS}
+    sleep 0.01
+    done
+    clear
+    tput cnorm
 }
 
 Flap-Travel(){
@@ -464,6 +579,7 @@ Snow-Sweep(){
             mv "$1" ~/.local/share/Trash/files 2> /dev/null
             trash_file="$HOME/.local/share/Trash/files/$undo"
             printf "\nUSE -u TO UNDO CHANGES" && sleep 1s
+            delanim
         fi
     else
         echo "penguin don't think $1 exits" && sleep 2s
@@ -570,14 +686,14 @@ while true; do
     elif [ "$input" = "[" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
-        printf " [ back - ] home - x trash "
+        printf " [ back - ] home - t trash "
         read -rsn1 bob
         if [ "$bob" = "]" ]; then
             prev=$(echo $PWD)
             cd ~/
         elif [ "$bob" = "[" ]; then
             cd "$prev"
-        elif [ "$bob" = "x" ]; then
+        elif [ "$bob" = "t" ]; then
             prev=$(echo $PWD)
             cd ~/.local/share/Trash/files
         fi
@@ -613,13 +729,14 @@ while true; do
         elif [ "$flag" = 0 ]; then
             bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
         fi
+        tput civis
         tput cup $(( $ll - 2 )) 3
         printf " enter destination folder at the end : "
         read bob2
         Fish-Borrow $bob $bob2
         max_rows=0
         display_seq
-    elif [ "$input" = "t" ] && [ "$bob" = "x" ]; then
+    elif [ "$input" = "t" ] && [ "$bob" = "t" ]; then
         make_window
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
@@ -627,6 +744,7 @@ while true; do
         read -rsn1 bob
         if [ "$bob" = "y" ]; then
             rm -rf ~/.local/share/Trash/files/*
+            trashanim
         fi
         max_rows=0
         display_seq
@@ -637,13 +755,16 @@ while true; do
         printf " Execute Commands : "
         read bob
         $bob
+        Line_sweep
+        tput civis
         max_rows=0
         display_seq
     elif [ "$input" = "x" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         printf " DELETE FILE/FOLDER : "
-        Snow-Sweep $(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf  --layout=reverse --border=bold --border=rounded --margin=10% --color=dark)
+        Snow-Sweep $(fnfind 0)
+        tput civis
         max_rows=0
         display_seq
     elif [ "$input" = "u" ] && [ -e "$trash_file" ]; then
@@ -654,7 +775,12 @@ while true; do
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         printf " Open Files ? : "
-        Belly-Flop $(find . -maxdepth 1 -type d -not -path '*/.*' -printf '%f\n'| fzf  --layout=reverse --border=bold --border=rounded --margin=10% )
+        if [ "$flag" = 1 ]; then
+            Belly-Flop $(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'cat {}')
+        elif [ "$flag" = 0 ]; then
+            Belly-Flop $(ls -a| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'cat {}')
+        fi
+        tput civis
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
