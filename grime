@@ -802,9 +802,9 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf " Open Files ? : "
         if [ "$flag" = 1 ]; then
-            Belly-Flop $(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'cat {}')
+            Belly-Flop $(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'file -b {} | grep -iq "text" && echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Separator Line ------\n$(cat {})" || echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Preview ------\nPenguin detects Binary file, cannot display content."')
         elif [ "$flag" = 0 ]; then
-            Belly-Flop $(ls -a| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'cat {}')
+            Belly-Flop $(ls -a| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'file -b {} | grep -iq "text" && echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Separator Line ------\n$(cat {})" || echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Preview ------\nPenguin detects Binary file, cannot display content."')
         fi
         tput civis
         max_rows=0
