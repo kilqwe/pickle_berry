@@ -530,7 +530,7 @@ Fish-Borrow(){
         display_seq
         tput cup $(( $ll - 2 )) 3
         printf " penguin asks if you want to rewrite (Y/n) : "
-        read choice
+        read -rsn1 choice
         if [ "$choice" = "y" ] || [ "$choice" = "Y" ] || [ "$choice" = "" ]; then
             echo "rewriting $last"
             flag=1
@@ -541,9 +541,9 @@ Fish-Borrow(){
     else 
         flag=1
     fi
-    if [ $# -lt 2 ]; then
+    if [ $# -eq 1 ]; then
         echo "penguin says invalid input," 
-        echo "give atleast souce file/directory and destination file/directory"
+        echo "give souce file/directory and destination file/directory"
     else
         for i in $@; do
             if [ -e $i ] || [ "$i" = "$last" ]; then
@@ -762,6 +762,15 @@ while true; do
         Fish-Borrow $bob $bob2
         max_rows=0
         display_seq
+    elif [ "$input" = "." ]; then
+        ll=$(tput lines)
+        fzf -m --layout=reverse --border=bold --border=rounded --margin=10% | wl-copy
+        tput civis
+        tput cup $(( $ll - 2 )) 3
+        printf " copied path "
+        sleep 1s
+        max_rows=0
+        display_seq
     elif [ "$input" = "t" ] && [ "$bob" = "t" ]; then
         make_window
         ll=$(tput lines)
@@ -810,7 +819,7 @@ while true; do
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-< back" "-[ quick travel" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "   "
+        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "-! for this help message" "-a to refresh display" "-h toggle hidden files" "-/ change directory" "-< back" "-[ quick travel" "-m to move files and folders" "-c to copy files and folders" "-r to rename file of folder" "-x to delete (use -u to undo)" "-o to open file" "-q to quit" "-. to copy path" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
