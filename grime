@@ -505,7 +505,7 @@ Flap-Travel(){
 
 Waddle-Name(){
     local flag=2
-    if [ $# -ne 2 ]; then
+    if [ $# -lt 2 ]; then
         echo "Enter the file/directory followed by the new name" && sleep 2s
     else
         if [ -e $1 ]; then
@@ -643,7 +643,6 @@ EOF
     sleep 1s 
     max_rows=0 
     display_seq 
-    prev=$(echo $PWD)
     chk="no"
     undo="bob.penglin067"
 }
@@ -662,7 +661,7 @@ while true; do
     if [ "$input" = "a" ]; then
         max_rows=0
         display_seq
-        prev=$(echo $PWD)
+        
     elif [ "$input" = "h" ]; then
         clear_win
         if [[ "$flag" -eq 1 ]]; then
@@ -679,12 +678,12 @@ while true; do
     elif [ "$input" = "/" ]; then
         bob=$(fnfind 1)
         tput civis
-        prev=$(echo $PWD)
+        
         cd "$bob"
         max_rows=0
         display_seq
     elif [ "$input" = "<" ]; then
-        prev=$(echo $PWD)
+        
         cd ../
         max_rows=0
         display_seq
@@ -694,18 +693,15 @@ while true; do
         printf " [ back - ] home - t trash - / type location "
         read -rsn1 bob
         if [ "$bob" = "]" ]; then
-            prev=$(echo $PWD)
             cd ~/
         elif [ "$bob" = "[" ]; then
-            cd "$prev"
+            cd -
         elif [ "$bob" = "t" ]; then
-            prev=$(echo $PWD)
             cd ~/.local/share/Trash/files
         elif [ "$bob" = "/" ]; then
             make_window
             tput cup $(( $ll - 2 )) 3
             printf " type location : "
-            prev=$(echo $PWD)
             read bob2
             cd "$bob2"
         else
