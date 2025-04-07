@@ -508,7 +508,7 @@ Waddle-Name(){
     if [ $# -lt 2 ]; then
         echo "Enter the file/directory followed by the new name" && sleep 2s
     else
-        if [ -e $1 ]; then
+        if [ -e "$1" ]; then
             flag=0
             continue
         else
@@ -516,16 +516,14 @@ Waddle-Name(){
             flag=1
             break
         fi
-        if [ "$flag" -eq 0 ]; then
-            mv $@ 2> /dev/null
-        fi
+        mv "$1" $2 2> /dev/null
     fi
 }
 
 Fish-Borrow(){
     local flag=1
     eval last=\${$#}
-    if [ -f $last ]; then
+    if [ -f $last ] -a [ $last != " " ]; then
         max_rows=0
         display_seq
         tput cup $(( $ll - 2 )) 3
@@ -541,22 +539,12 @@ Fish-Borrow(){
     else 
         flag=1
     fi
-    if [ $# -eq 1 ]; then
+    if [ -n $@ ]; then
         echo "penguin says invalid input," 
-        echo "give souce file/directory and destination file/directory"
-    else
-        for i in $@; do
-            if [ -e $i ] || [ "$i" = "$last" ]; then
-                continue
-            else
-                echo "penguin don't think $i exits"
-                break
-            fi
-        done
-        if [ "$flag" -eq 1 ]; then
-            cp $@ 2> /dev/null
-            copyanim
-        fi
+        echo "select souce file/directory and give destination file/directory" && sleep 2s
+    elif [ "$flag" -eq 1 ]; then
+        cp $@ 2> /dev/null
+        copyanim
     fi
 }
 
@@ -741,7 +729,7 @@ while true; do
         tput civis
         printf " enter new name : "
         read bob2
-        Waddle-Name $bob $bob2
+        Waddle-Name "$bob" $bob2
         max_rows=0
         display_seq
     elif [ "$input" = "c" ]; then
