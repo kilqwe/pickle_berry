@@ -637,9 +637,14 @@ EOF
 
 #--------------------main--------------------#
 startup
-
+resize_trigger=0
+trap 'resize_trigger=1' SIGWINCH
 while true; do
-    read -rsn1 input
+    read -rsn1 -t 0.1 input
+    if [ "$resize_trigger" -eq 1 ]; then
+        input="a"
+        resize_trigger=0
+    fi
 
     if [ "$input" = "!" ] && [ "$chk" = "penglin" ] ; then
         input="a"
@@ -774,11 +779,12 @@ while true; do
         printf " Execute command : "
         read bob
         clear_win
-        make_window
-        echo "Running: $bob"
+        echo "[user@pbfm]$ $bob"
+        echo "------------"
+        printf "\033[0;32m"
         bash -c "$bob"
-        echo
-        read -n 1 -s -r -p "Press any key to return to the file manager..."
+        printf "\033[0m\n"
+        read -n 1 -s -r -p "Press any key to return to the file manager ..."
         Line_sweep
         tput civis
         max_rows=0
@@ -805,36 +811,16 @@ while true; do
             Belly-Flop $(ls -a| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'file -b {} | grep -iq "text" && echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Separator Line ------\n$(cat {})" || echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Preview ------\nPenguin detects Binary file, cannot display content."')
         fi
         tput civis
-        sleep 2s
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "░█▀▀▀░█▀▀▄░░▀░░█▀▄▀█░█▀▀" "░█░▀▄░█▄▄▀░░█▀░█░▀░█░█▀▀" "░▀▀▀▀░▀░▀▀░▀▀▀░▀░░▒▀░▀▀▀" "keyboard oriented file manager" "   " "<!> for this help message" "<a> to refresh display" "<h> toggle hidden files" "</> change directory" "<<> back" "<[> quick commands" "<m> to move files and folders" "<c> to copy files and folders" "<r> to rename file of folder" "<x> to delete (use <u> to undo)" "<o> to open file" "<q> to quit" "<.> to copy path" "   "
+        Fillaform "   " "█▀▄ █ ▄▀▀ █▄▀ █   ██▀   ██▄ ██▀ █▀▄ █▀▄ ▀▄▀" "█▀  █ ▀▄▄ █ █ █▄▄ █▄▄   █▄█ █▄▄ █▀▄ █▀▄  █" "The keyboard oriented file manager" "   " "<!> for this help message" "<a> to refresh display" "<h> toggle hidden files" "</> change directory" "<<> back" "<[> quick commands" "<m> to move files and folders" "<c> to copy files and folders" "<r> to rename file of folder" "<x> to delete (use <u> to undo)" "<o> to open file" "<q> to quit" "<.> to copy path" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
         break
-    else 
-        ll=$(tput lines)
-        tput cup $(( $ll - 2 )) 3
-        echo " invalid input " && sleep 1s
-        max_rows=0
-        display_seq
     fi
 done
-
-flicker() {
-  for i in {1..5}; do
-    echo -e "\e[2J\e[1;31m███ Initiating Exit sequence ███\e[0m"
-    sleep 0.05
-    clear
-    sleep 0.05
-  done
-}
-
-type_out() {
-  echo "$1" | pv -qL 500
-}
 
 ascii_wave() {
   frames=(
@@ -848,14 +834,28 @@ ascii_wave() {
     "⣷"
   )
   for i in {1..16}; do
-    printf "\r%s Disconnect matrix... " "${frames[i % 8]}"
+    printf "\r%s Disconnect matrix " "${frames[i % 8]}"
+    sleep 0.1
+  done
+  echo ""
+  for i in {1..16}; do
+    printf "\r%s Running exit sequence " "${frames[i % 8]}"
+    sleep 0.1
+  done
+  echo ""
+  for i in {1..16}; do
+    printf "\r%s Removing nodes " "${frames[i % 8]}"
+    sleep 0.1
+  done
+  echo ""
+  for i in {1..16}; do
+    printf "\r%s Clearing temp variables " "${frames[i % 8]}"
     sleep 0.1
   done
   echo ""
 }
 
-tput civis
-flicker
+clear_win
 ascii_wave
 clear_win
 tput cnorm
