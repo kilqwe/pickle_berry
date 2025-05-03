@@ -34,7 +34,6 @@ ascii_wave() {
 
 if [ -d "$install_dir" ] && [ -e "$desktop_file" ]; then
     printf "\033[0;31mDo you reallly want to UNINSTALL pickleBerry?? :(\033[0m [y/n]: "
-    read ch
 else
     printf "\033[0;31m!PickleBerry not installed\033[0m\n"
     exit
