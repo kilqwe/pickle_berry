@@ -33,7 +33,7 @@ ascii_wave() {
 }
 
 if [ -d "$install_dir" ] && [ -e "$desktop_file" ]; then
-    printf "\033[0;31mUninstalling pickleBerry? :(\033[0m [y/n]: "
+    printf "Uninstalling pickleBerry :("
 else
     printf "\033[0;31m!pickleBerry not installed\033[0m\n"
     exit
