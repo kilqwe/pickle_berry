@@ -1,5 +1,5 @@
 #!/bin/bash
-#--------------------Author:ekahPruthvi--------------------#
+# ekahPruthvi (SCU) <ekahpdp@gmail.com>
 
 #-----------------init------------------------#
 cd ~/
@@ -7,6 +7,7 @@ cd ~/
 flag=1
 win_size=$( tput lines )
 max_rows=0
+current_dir="$(dirname "$(readlink -f "$0")")"
 
 tput civis
 printf '\033[2J\033[3J\033[1;1H'
@@ -549,6 +550,7 @@ Fish-Borrow(){
 }
 
 Snow-Sweep(){
+    tput civis
     local inp
     undo="$1"
     undodir="$PWD"
@@ -575,13 +577,14 @@ Snow-Sweep(){
 }
 
 Belly-Flop(){ 
+    tput civis
     local brow
     local code
     local inp
     if [ $# -gt 1 ]; then
         echo "penguin can not open mutiple files/folders" && sleep 2s
     elif [ $# -lt 1 ]; then
-        echo "penguin has to open somthing ??" && sleep 2s
+        echo
     elif [ -e "$1" ]; then
         if [[ "$1" =~ \.html$ ]]; then 
             brow=$(grep -il "MimeType=.*text/html" /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/.desktop//')
@@ -671,12 +674,10 @@ while true; do
     elif [ "$input" = "/" ]; then
         bob=$(fnfind 1)
         tput civis
-        
         cd "$bob"
         max_rows=0
         display_seq
     elif [ "$input" = "<" ]; then
-        
         cd ../
         max_rows=0
         display_seq
@@ -718,25 +719,29 @@ while true; do
             bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
         fi
         tput civis
-        tput cup $(( $ll - 2 )) 3
-        printf " enter destination folder  : "
-        read bob2
-        Flap-Travel $bob $bob2
-        if [ $fileanim -eq 0 ]; then
-            moveanim
+        if [ "$bob" != "" ]; then
+            tput cup $(( $ll - 2 )) 3
+            printf " enter destination folder  : "
+            read bob2
+            Flap-Travel $bob $bob2
+            if [ $fileanim -eq 0 ]; then
+                moveanim
+            fi
+            max_rows=0
+            display_seq 
         fi
-        max_rows=0
-        display_seq 
     elif [ "$input" = "r" ]; then
         ll=$(tput lines)
         tput cup $(( $ll - 2 )) 3
         bob=$(fnfind 0)
         tput civis
-        printf " enter new name : "
-        read bob2
-        Waddle-Name "$bob" $bob2
-        max_rows=0
-        display_seq
+        if [ "$bob" != "" ]; then
+            printf " enter new name : "
+            read bob2
+            Waddle-Name "$bob" $bob2
+            max_rows=0
+            display_seq
+        fi
     elif [ "$input" = "c" ]; then
         ll=$(tput lines)
         if [ "$flag" = 1 ]; then
@@ -745,21 +750,21 @@ while true; do
             bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
         fi
         tput civis
-        tput cup $(( $ll - 2 )) 3
-        printf " enter destination folder or coplied file name : "
-        read bob2
-        Fish-Borrow $bob $bob2
-        max_rows=0
-        display_seq
+        if [ "$bob" != "" ]; then
+            tput cup $(( $ll - 2 )) 3
+            printf " enter destination folder or coplied file name : "
+            read bob2
+            Fish-Borrow $bob $bob2
+            max_rows=0
+            display_seq
+        fi
     elif [ "$input" = "." ]; then
         ll=$(tput lines)
-        fzf -m --layout=reverse --border=bold --border=rounded --margin=10% | wl-copy
+        bp=$(fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
         tput civis
-        tput cup $(( $ll - 2 )) 3
-        printf " copied path "
-        sleep 1s
-        max_rows=0
-        display_seq
+        if [ "$bp" != "" ]; then
+            $current_dir/src/berry_picker $bp 2> /dev/null
+        fi
     elif [ "$input" = "t" ] && [ "$bob" = "t" ]; then
         make_window
         ll=$(tput lines)
@@ -778,15 +783,17 @@ while true; do
         tput cup $(( ll - 2 )) 3
         printf " Execute command : "
         read bob
-        clear_win
-        echo "[user@pbfm]$ $bob"
-        echo "------------"
-        printf "\033[0;32m"
-        bash -c "$bob"
-        printf "\033[0m\n"
-        read -n 1 -s -r -p "Press any key to return to the file manager ..."
-        Line_sweep
-        tput civis
+        if [ "$bob" != "" ]; then
+            clear_win
+            echo "[user@pbfm]$ $bob"
+            echo "------------"
+            printf "\033[0;32m"
+            bash -c "$bob"
+            printf "\033[0m\n"
+            read -n 1 -s -r -p "Press any key to return to the file manager ..."
+            Line_sweep
+            tput civis
+        fi
         max_rows=0
         display_seq
     elif [ "$input" = "x" ]; then
@@ -794,7 +801,6 @@ while true; do
         tput cup $(( $ll - 2 )) 3
         printf " DELETE FILE/FOLDER : "
         Snow-Sweep $(fnfind 0)
-        tput civis
         max_rows=0
         display_seq
     elif [ "$input" = "u" ] && [ -e "$trash_file" ]; then
@@ -810,11 +816,10 @@ while true; do
         elif [ "$flag" = 0 ]; then
             Belly-Flop $(ls -a| fzf --layout=reverse --border=bold --border=rounded --margin=10% --preview 'file -b {} | grep -iq "text" && echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Separator Line ------\n$(cat {})" || echo -e "Permissions: $(stat -c %A {})\nLinks: $(stat -c %h {})\nOwner: $(stat -c %U {})\nGroup: $(stat -c %G {})\nSize: $(stat -c %s {}) bytes\nModified: $(stat -c %y {})\nFile: {}\n\n------ Preview ------\nPenguin detects Binary file, cannot display content."')
         fi
-        tput civis
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "█▀▄ █ ▄▀▀ █▄▀ █   ██▀   ██▄ ██▀ █▀▄ █▀▄ ▀▄▀" "█▀  █ ▀▄▄ █ █ █▄▄ █▄▄   █▄█ █▄▄ █▀▄ █▀▄  █" "The keyboard oriented file manager" "   " "<!> for this help message" "<a> to refresh display" "<h> toggle hidden files" "</> change directory" "<<> back" "<[> quick commands" "<m> to move files and folders" "<c> to copy files and folders" "<r> to rename file of folder" "<x> to delete (use <u> to undo)" "<o> to open file" "<q> to quit" "<.> to copy path" "   "
+        Fillaform "   " "█▀▄ █ ▄▀▀ █▄▀ █   ██▀   ██▄ ██▀ █▀▄ █▀▄ ▀▄▀" "█▀  █ ▀▄▄ █ █ █▄▄ █▄▄   █▄█ █▄▄ █▀▄ █▀▄  █" "The keyboard oriented file manager" "   " "<!> for this help message" "<a> to refresh display" "<h> toggle hidden files" "</> change directory" "<<> back" "<[> quick commands" "<m> to move files and folders" "<c> to copy files and folders" "<r> to rename file of folder" "<x> to delete (use <u> to undo)" "<o> to open file" "<q> to quit" "<.> to drag and drop files" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
@@ -833,24 +838,24 @@ ascii_wave() {
     "⣯"
     "⣷"
   )
-  for i in {1..16}; do
-    printf "\r%s Disconnect matrix " "${frames[i % 8]}"
-    sleep 0.1
+  for i in {1..12}; do
+    printf "\r%s Disconnect matrix " "${frames[i % 6]}"
+    sleep 0.05
   done
   echo ""
-  for i in {1..16}; do
-    printf "\r%s Running exit sequence " "${frames[i % 8]}"
-    sleep 0.1
+  for i in {1..12}; do
+    printf "\r%s Running exit sequence " "${frames[i % 6]}"
+    sleep 0.05
   done
   echo ""
-  for i in {1..16}; do
-    printf "\r%s Removing nodes " "${frames[i % 8]}"
-    sleep 0.1
+  for i in {1..12}; do
+    printf "\r%s Removing nodes " "${frames[i % 6]}"
+    sleep 0.05
   done
   echo ""
-  for i in {1..16}; do
-    printf "\r%s Clearing temp variables " "${frames[i % 8]}"
-    sleep 0.1
+  for i in {1..12}; do
+    printf "\r%s Clearing temp variables " "${frames[i % 6]}"
+    sleep 0.05
   done
   echo ""
 }
@@ -859,3 +864,4 @@ clear_win
 ascii_wave
 clear_win
 tput cnorm
+exit
