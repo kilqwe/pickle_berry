@@ -1,6 +1,13 @@
 #!/bin/bash
 # ekahPruthvi (SCU) <ekahpdp@gmail.com>
 
+#----------------version----------------------#
+
+if [ "$1" = "-v" ]; then
+    echo "pickleBerry v2.8.0"
+    exit
+fi
+
 #-----------------init------------------------#
 cd ~/
 
@@ -40,6 +47,8 @@ fnf() {
     else
         folders=$(ls -Ap | grep / | grep "^.")
         files=$(ls -Ap | grep -v / | grep "^.")
+        ls -Ap | grep / | grep "^." > /tmp/pbfiles.dat
+        ls -Ap | grep -v / | grep "^." >> /tmp/pbfiles.dat
     fi
 }
 
@@ -79,7 +88,7 @@ make_window() {
     done
     printf "┘"
     tput cup 0 $(( $COL - 16 ))
-    printf " pickle berry "
+    printf " pickleBerry "
     tput cup 1 1
 }
 
@@ -681,6 +690,7 @@ EOF
 }
 
 #--------------------main--------------------#
+
 startup
 resize_trigger=0
 trap 'resize_trigger=1' SIGWINCH
@@ -746,9 +756,9 @@ while true; do
     elif [ "$input" = "m" ]; then
         ll=$(tput lines)
         if [ "$flag" = 1 ]; then
-            bob=$(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+            bob=$(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf -m --ghost=" select files/folders to move" --layout=reverse --border=bold --border=rounded --margin=10%)
         elif [ "$flag" = 0 ]; then
-            bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+            bob=$(ls -a| fzf -m --ghost=" select files/folders to move" --layout=reverse --border=bold --border=rounded --margin=10%)
         fi
         tput civis
         if [ "$bob" != "" ]; then
@@ -777,9 +787,9 @@ while true; do
     elif [ "$input" = "c" ]; then
         ll=$(tput lines)
         if [ "$flag" = 1 ]; then
-            bob=$(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+            bob=$(find . -maxdepth 1 -not -path '*/.*' -printf '%f\n'| fzf -m --ghost=" select file/folder to copy" --layout=reverse --border=bold --border=rounded --margin=10%)
         elif [ "$flag" = 0 ]; then
-            bob=$(ls -a| fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+            bob=$(ls -a| fzf -m --ghost=" select file/folder to copy" --layout=reverse --border=bold --border=rounded --margin=10%)
         fi
         tput civis
         if [ "$bob" != "" ]; then
@@ -792,7 +802,7 @@ while true; do
         fi
     elif [ "$input" = "." ]; then
         ll=$(tput lines)
-        bp=$(fzf -m --layout=reverse --border=bold --border=rounded --margin=10%)
+        bp=$( find . -maxdepth 2 | fzf -m --ghost=" select files for drag and drop" --layout=reverse --border=bold --border=rounded --margin=10%)
         tput civis
         if [ "$bp" != "" ]; then
             $current_dir/src/berry_picker $bp 2> /dev/null
@@ -851,7 +861,7 @@ while true; do
         max_rows=0
         display_seq
     elif [ "$input" = "!" ]; then
-        Fillaform "   " "█▀▄ █ ▄▀▀ █▄▀ █   ██▀   ██▄ ██▀ █▀▄ █▀▄ ▀▄▀" "█▀  █ ▀▄▄ █ █ █▄▄ █▄▄   █▄█ █▄▄ █▀▄ █▀▄  █" "The keyboard oriented file manager" "   " "<!> for this help message" "<a> to refresh display" "<h> toggle hidden files" "</> change directory" "<<> back" "<[> quick commands" "<m> to move files and folders" "<c> to copy files and folders" "<r> to rename file of folder" "<x> to delete (use <u> to undo)" "<o> to open file" "<q> to quit" "<.> to drag and drop files" "   "
+        Fillaform "   " "█▀▄ █ ▄▀▀ █▄▀ █   ██▀   ██▄ ██▀ █▀▄ █▀▄ ▀▄▀" "█▀  █ ▀▄▄ █ █ █▄▄ █▄▄   █▄█ █▄▄ █▀▄ █▀▄  █ v2.8.0 " "The keyboard oriented file manager" "   " "<!> for this help message" "<a> to refresh display" "<h> toggle hidden files" "</> change directory" "<<> back" "<[> quick commands" "<m> to move files and folders" "<c> to copy files and folders" "<r> to rename file of folder" "<x> to delete (use <u> to undo)" "<o> to open file" "<q> to quit" "<.> to drag and drop files" "   "
         chk="penglin"
     elif [ "$input" = "q" ]; then
         tput cnorm
