@@ -2,8 +2,13 @@
   <img src='https://github.com/user-attachments/assets/6c42021c-a554-4435-abbb-2c6f93d6e181' alt='banner'>
 </p>
 
+#
+![image](https://github.com/user-attachments/assets/e50f7d43-dca9-4ef0-8253-1b8498911175)
 
-[![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](./assets/pbfm.mp4)
+
+# Dependencies
+- bash
+- fzf
 
 # Installation
 
@@ -23,3 +28,4 @@ sudo ./install.sh
 ```bash
 curl -Ss https://raw.githubusercontent.com/ekahPruthvi/pickle_berry/refs/heads/main/scripts/uninstall.sh | sudo bash
 ```
+# Usage
