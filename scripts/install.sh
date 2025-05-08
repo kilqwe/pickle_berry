@@ -12,6 +12,7 @@ mkdir $install_dir
 cp $current_dir/pbfm $install_dir/ 
 cp $current_dir/pickleberry.png $install_dir/
 cp -a $current_dir/src $install_dir/
+ln -s $install_dir/pbfm /usr/bin/pbfm
 cat > /usr/share/applications/pickleBerry.desktop << EOF 
 [Desktop Entry]
 Version=2.8.0
