@@ -58,9 +58,9 @@ curl -Ss https://raw.githubusercontent.com/ekahPruthvi/pickle_berry/refs/heads/m
 
 # Freature Tab
 ## todo in the future
-[ ] Mount and unmount external drives support
-[ ] Tarball support
-[ ] quickLinks - shortcut support
+- [ ] Mount and unmount external drives support
+- [ ] Tarball support
+- [ ] quickLinks - shortcut support
 
 
 
