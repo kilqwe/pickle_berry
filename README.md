@@ -57,7 +57,7 @@ curl -Ss https://raw.githubusercontent.com/ekahPruthvi/pickle_berry/refs/heads/m
 - Use tab in selection menu to select multiple
 
 # Freature Tab
-## todo in the future
+### todo in the future
 - [ ] Mount and unmount external drives support
 - [ ] Tarball support
 - [ ] quickLinks - shortcut support
