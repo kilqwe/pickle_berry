@@ -56,7 +56,7 @@ curl -Ss https://raw.githubusercontent.com/ekahPruthvi/pickle_berry/refs/heads/m
 - If folder in the same directory avoid giving "/" infront of it, `/directory` --> ❌
 - Use tab in selection menu to select multiple
 
-# Freature Tab
+# Features to add
 ### todo in the future
 - [ ] Mount and unmount external drives support
 - [ ] Tarball support
