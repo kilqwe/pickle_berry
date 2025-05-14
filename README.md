@@ -14,6 +14,7 @@ things under diffrent senarios.
 # Dependencies
 - bash
 - fzf
+- tput (ncurses)
 
 # Installation
 
