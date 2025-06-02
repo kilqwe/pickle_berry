@@ -890,16 +890,6 @@ ascii_wave() {
     sleep 0.05
   done
   echo ""
-  for i in {1..2}; do
-    printf "\r%s Removing nodes " "${frames[i % 6]}"
-    sleep 0.05
-  done
-  echo ""
-  for i in {1..2}; do
-    printf "\r%s Clearing temp variables " "${frames[i % 6]}"
-    sleep 0.05
-  done
-  echo ""
 }
 
 clear_win
