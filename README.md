@@ -30,6 +30,12 @@ run in terminal from inside the folder
 sudo ./install.sh
 ```
 
+### 4] Launch pickleBerry
+In terminal
+```bash
+pbfm
+```
+
 # Uninstallation 
 ```bash
 curl -Ss https://raw.githubusercontent.com/ekahPruthvi/pickle_berry/refs/heads/main/scripts/uninstall.sh | sudo bash
